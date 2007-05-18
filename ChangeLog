@@ -2,6 +2,30 @@
 # arch-tag: automatic-ChangeLog--lcourtes@laas.fr--2006-libre/guile-rpc--devo--0
 #
 
+2007-05-18 18:03:02 GMT	Ludovic Courtes <ludovic.courtes@laas.fr>	patch-47
+
+    Summary:
+      Added support for Guile-Lint.
+    Revision:
+      guile-rpc--devo--0--patch-47
+
+    * configure.ac: Check for Guile-Lint.
+    
+    * modules/Makefile.am (all-local): New target.
+    
+    * tests/Makefile.am (all-local): New target.
+    
+    * utils/Makefile.am (all-local): New target.
+
+    modified files:
+     ChangeLog configure.ac modules/Makefile.am tests/Makefile.am
+     utils/Makefile.am
+
+    new patches:
+     lcourtes@laas.fr--2005-mobile/guile-rpc--devo--0--patch-15
+     lcourtes@laas.fr--2005-mobile/guile-rpc--devo--0--patch-16
+
+
 2007-05-15 16:42:36 GMT	Ludovic Court`es <ludovic.courtes@laas.fr>	patch-46
 
     Summary:

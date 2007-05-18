@@ -15,6 +15,11 @@ AC_CONFIG_SRCDIR([modules/rpc/xdr.scm])
 GUILE_PROGS
 GUILE_SITE_DIR
 
+# Guile-Lint (http://www.geocities.com/user42_kevin/guile-lint/index.html)
+AC_PATH_PROG([GUILE_LINT], [guile-lint])
+AC_SUBST([GUILE_LINT])
+AM_CONDITIONAL([HAVE_GUILE_LINT], test "x$GUILE_LINT" != "x")
+
 # Need the R6RS libs.
 GUILE_MODULE_REQUIRED([r6rs bytevector])
 GUILE_MODULE_REQUIRED([r6rs i/o ports])
