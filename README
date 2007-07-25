@@ -1,5 +1,5 @@
-Guile-RPC
-=========
+GNU Guile-RPC
+=============
 
 This package provides a pure Scheme implementation of XDR and ONC RPC
 (respectively RFC 4506 and RFC 1831) for GNU Guile 1.8.
@@ -8,19 +8,24 @@ This package provides a pure Scheme implementation of XDR and ONC RPC
 Requirements
 ------------
 
-GNU Guile 1.8.x or later
-guile-r6rs-libs 0.0 or later
+  * GNU Guile 1.8.x or later
+    http://www.gnu.org/software/guile/guile.html
+
+  * guile-r6rs-libs 0.0 or later
+    http://www.laas.fr/~lcourtes/software/guile/guile-r6rs-libs-0.0.tar.gz
 
 
 Development
 -----------
 
-The main GNU Arch repository is currently located at
-http://www.laas.fr/~lcourtes/software/arch-2006/ .  Look for branch
-`guile-rpc--devo--0'.
+GNU Guile-RPC is hosted at Savannah and development uses the GNU Arch
+revision control system (http://www.gnu.org/software/gnu-arch/).
 
-Please email me, Ludovic Courtès <ludovic.courtes@laas.fr>, for
-comments, patches, etc.
+The main GNU Arch repository is located at
+http://arch.sv.gnu.org/archives/guile-rpc/2007/ .  Look for branch
+`guile-rpc--devo--0.1' or similar.
+
+Please email <bug-guile-rpc@gnu.org> for comments, patches, etc.
 
 
 Enjoy!

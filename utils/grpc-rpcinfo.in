@@ -49,10 +49,16 @@ exec ${GUILE-@GUILE@} -l "$0" -c "(apply $main (command-line))" "$@"
   (format #t "  -p, --dump     List registered RPC services~%")
   (format #t "  -d, --delete   Unregister the given program and version from~%")
   (format #t "                 the local portmapper~%")
-  (format #t "~%"))
+  (format #t "~%")
+  (format #t "Report bugs to <@PACKAGE_BUGREPORT@>.~%"))
 
 (define (show-version)
-  (format #t "@PACKAGE_STRING@~%"))
+  (format #t "grpc-rpcinfo (GNU Guile-RPC) @PACKAGE_VERSION@
+Copyright (C) 2007 Free Software Foundation
+
+License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.~%"))
 
 
 
@@ -88,6 +94,7 @@ exec ${GUILE-@GUILE@} -l "$0" -c "(apply $main (command-line))" "$@"
   (let ((opt (getopt-long args %options)))
     (cond ((option-ref opt 'help #f)
            (show-help))
+
           ((option-ref opt 'version #f)
            (show-version))
 

@@ -14,10 +14,10 @@
 @ifinfo
 @dircategory The Algorithmic Language Scheme
 @direntry
-* Guile RPC: (guile-rpc).      An ONC RPC Framework for Guile.
+* Guile-RPC: (guile-rpc).      An ONC RPC Framework for Guile.
 @end direntry
 
-This file documents Guile-RPC.
+This file documents GNU Guile-RPC.
 
 Copyright @copyright{} 2007 Ludovic Court@`es
 
@@ -38,7 +38,7 @@ approved by the author.
 
 @titlepage
 @title An ONC RPC Framework for Guile
-@subtitle for Guile-RPC @value{VERSION}
+@subtitle for GNU Guile-RPC @value{VERSION}
 @author Ludovic Court@`es
 
 @page
@@ -70,7 +70,7 @@ approved by the author.
 @node Top, Introduction, (dir), (dir)
 @top An ONC RPC Framework for Guile
 
-This document describes Guile-RPC version @value{VERSION}.  It was
+This document describes GNU Guile-RPC version @value{VERSION}.  It was
 last updated in @value{UPDATED-MONTH}.
 
 @menu
@@ -89,12 +89,12 @@ last updated in @value{UPDATED-MONTH}.
 @node Introduction, Quick Start, Top, Top
 @chapter Introduction
 
-Guile-RPC is a framework for distributed programming under Guile.  It
-is a pure Scheme implementation of the ONC RPC standard, i.e., the
-``Open Network Computing'' Remote Procedure Call standard.  ONC RPC is
-standardized by the Internet Engineering Task Force (IETF) as RFC
-1831.  It is based on the External Data Representation standard (XDR),
-known as RFC 4506 (@pxref{References}).
+GNU Guile-RPC is a framework for distributed programming under GNU
+Guile.  It is a pure Scheme implementation of the ONC RPC standard,
+i.e., the ``Open Network Computing'' Remote Procedure Call standard.
+ONC RPC is standardized by the Internet Engineering Task Force (IETF) as
+RFC 1831.  It is based on the External Data Representation standard
+(XDR), known as RFC 4506 (@pxref{References}).
 
 @cindex marshalling
 @cindex distributed programming
@@ -117,15 +117,19 @@ being particularly compact, allowing for relatively low bandwidth
 requirements and fast implementations, especially compared to more
 verbose RPC protocols such as XML-RPC and SOAP.
 
-Guile-RPC provides an easy access to the ONC RPC protocol for the
+GNU Guile-RPC provides an easy access to the ONC RPC protocol for the
 Guile Scheme programmer.  In particular, it allows standard Scheme
 types to be mapped to XDR data types, so that Scheme objects are
 easily encoded to or decoded from XDR.
 
-In order to use Guile-RPC, all that is needed is
+In order to use GNU Guile-RPC, all that is needed is
 @uref{http://www.gnu.org/software/guile/guile.html, GNU Guile 1.8}
 along with the R6RS library package for Guile 1.8, known as
-@code{guile-r6rs-libs}.
+@uref{http://www.laas.fr/~lcourtes/software/guile/guile-r6rs-libs-0.0.tar.gz,
+@code{guile-r6rs-libs}}.
+
+Please send bug reports, comments and patches to the
+@email{bug-guile-rpc@@gnu.org, Guile-RPC mailing list}.
 
 
 @c *********************************************************************
