@@ -69,8 +69,8 @@
   (make-xdr-basic-type 'int32 4
                        (lambda (value)
                          (and (integer? value)
-                              (>= -2147483648)
-                              (< 2147483648)))
+                              (>= value -2147483648)
+                              (<  value  2147483648)))
                        (lambda (type value bv index)
                          (bytevector-s32-set! bv index value
                                               %xdr-endianness))
@@ -79,9 +79,8 @@
                                              0 %xdr-endianness))
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port (* 4 count))))
-                           (apply vector
-                                  (bytevector->sint-list bv %xdr-endianness
-                                                         4))))))
+                           (list->vector
+                            (bytevector->sint-list bv %xdr-endianness 4))))))
 
 (define xdr-unsigned-integer
   ;; Section 4.2.
@@ -98,9 +97,8 @@
                                              0 %xdr-endianness))
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port (* 4 count))))
-                           (apply vector
-                                  (bytevector->uint-list bv %xdr-endianness
-                                                         4))))))
+                           (list->vector
+                            (bytevector->uint-list bv %xdr-endianness 4))))))
 
 (define (make-xdr-enumeration name enum-alist)
   ;; Section 4.3.
@@ -147,12 +145,12 @@
                        decode-enum
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port (* 4 count))))
-                           (apply vector
-                                  (map (lambda (value)
-                                         (enum-symbol type value))
-                                       (bytevector->uint-list bv
-                                                              %xdr-endianness
-                                                              4)))))))
+                           (list->vector
+                            (map (lambda (value)
+                                   (enum-symbol type value))
+                                 (bytevector->uint-list bv
+                                                        %xdr-endianness
+                                                        4)))))))
 
 (define xdr-boolean
   ;; Section 4.4.
@@ -170,9 +168,8 @@
                                              0 %xdr-endianness))
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port (* 8 count))))
-                           (apply vector
-                                  (bytevector->sint-list bv %xdr-endianness
-                                                         8))))))
+                           (list->vector
+                            (bytevector->sint-list bv %xdr-endianness 8))))))
 
 (define xdr-unsigned-hyper-integer
   ;; Section 4.5.
@@ -188,9 +185,8 @@
                                              0 %xdr-endianness))
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port (* 8 count))))
-                           (apply vector
-                                  (bytevector->uint-list bv %xdr-endianness
-                                                         8))))))
+                           (list->vector
+                            (bytevector->uint-list bv %xdr-endianness 8))))))
 
 (define xdr-float
   ;; Single-precision floating point (Section 4.6).
@@ -234,7 +230,7 @@
                                c)))
                        (lambda (type count port)
                          (let ((bv (get-bytevector-n port count)))
-                           (apply vector (bytevector->u8-list bv))))))
+                           (list->vector (bytevector->u8-list bv))))))
 
 (define (make-xdr-fixed-length-opaque-array size)
   ;; Section 4.9.

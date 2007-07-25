@@ -17,7 +17,6 @@
 
 (define-module (rpc xdr)
   :use-module (srfi srfi-9)
-  :use-module (srfi srfi-11)
   :autoload   (srfi srfi-34)   (raise)
   :use-module (srfi srfi-35)
   :use-module (r6rs bytevector)
@@ -48,7 +47,8 @@
            xdr-input-type-error:value
            &xdr-unknown-type-error xdr-unknown-type-error?
            &xdr-union-discriminant-error xdr-union-discriminant-error?
-           &xdr-vector-size-exceeded-error xdr-vector-size-exceeded-error?))
+           &xdr-vector-size-exceeded-error xdr-vector-size-exceeded-error?
+           xdr-vector-size-exceeded-error:element-count))
 
 
 ;;; Author: Ludovic Courtès <ludovic.courtes@laas.fr>
@@ -110,7 +110,7 @@
 
 (define-condition-type &xdr-type-error &error
   xdr-type-error?
-  (type      xdr-unknown-type-error:type))
+  (type      xdr-type-error:type))
 
 (define-condition-type &xdr-unknown-type-error &xdr-type-error
   xdr-unknown-type-error?)

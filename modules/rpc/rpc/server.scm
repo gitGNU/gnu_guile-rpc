@@ -29,11 +29,12 @@
   :use-module (r6rs bytevector)
   :autoload   (r6rs i/o ports)      (lookahead-u8)
 
-  :export (procedure-call-information
+  :export (procedure-call-information rpc-call?
            rpc-call-xid rpc-call-program rpc-call-version
            rpc-call-procedure rpc-call-credentials rpc-call-verifier
 
            make-rpc-program make-rpc-program-version make-rpc-procedure
+           rpc-program? rpc-program-version? rpc-procedure?
            rpc-program-number rpc-program-versions rpc-program-lookup-version
            rpc-program-version-number rpc-program-version-procedures
            rpc-program-version-lookup-procedure
@@ -97,7 +98,7 @@
 
 (define-condition-type &onc-rpc-version-mismatch-error &rpc-server-error
   onc-rpc-version-mismatch-error?
-  (peer-version  onc-rpc-version-mismatch:peer-version))
+  (peer-version  onc-rpc-version-mismatch-error:peer-version))
 
 (define-condition-type &rpc-invalid-call-message-error &rpc-server-error
   rpc-invalid-call-message-error?
@@ -292,9 +293,7 @@ the appropriate reply message via @var{send-result}."
            (send-result raw-reply 0 reply-size)))
 
         ((rpc-invalid-procedure-error? c)
-         (let* ((prog        (rpc-invalid-procedure-error:program c))
-                (version     (rpc-invalid-procedure-error:version c))
-                (reply       (make-rpc-message (rpc-call-xid call)
+         (let* ((reply       (make-rpc-message (rpc-call-xid call)
                                                'REPLY 'MSG_ACCEPTED
                                                'PROC_UNAVAIL))
                 (reply-size  (xdr-type-size rpc-message reply))
@@ -439,10 +438,8 @@ is left."
                                        (send-rpc-record port bv
                                                         offset count))))))
       (lambda (key . args)
-        (let ((proc  (car args))
-              (errno (car (cadddr args))))
-          (raise (condition (&rpc-connection-lost-error
-                             (port port)))))))))
+        (raise (condition (&rpc-connection-lost-error
+                           (port port))))))))
 
 (define-record-type <stream-connection>
   (make-stream-connection port address rpc-program)
