@@ -1,5 +1,7 @@
-* New in Guile-RPC 0.1
+* New in GNU Guile-RPC 0.1
 
+** Became part of the GNU Project
+** Switched source code to LGPLv3
 ** Added portmapper interface definitions
 ** Added portmapper client `grpc-rpcinfo', similar to `rpcinfo(1)'
 ** Bug fixes in the TCP server loop
