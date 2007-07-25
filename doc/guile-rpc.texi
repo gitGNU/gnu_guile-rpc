@@ -135,7 +135,7 @@ given an arbitrary XDR encoded sequence to determine the XDR type of the
 encoded data.  This is different from
 @uref{http://dbus.freedesktop.org/, D-Bus}, for example, which uses a
 compact and self-describing encoding.  In practice, this is sufficient
-for most applications.
+for a wide range of applications.
 
 GNU Guile-RPC provides an easy access to the ONC RPC protocol for the
 Guile Scheme programmer.  In particular, it allows standard Scheme
@@ -349,6 +349,7 @@ build ONC RPC clients and servers.
 * Usage Notes::                 Preliminary remarks
 * Implementation of XDR::       The external data representation
 * Implementation of ONC RPC::   Remote procedure calls
+* Standard RPC Programs::       Interfaces to common RPC programs
 @end menu
 
 @node Usage Notes, Implementation of XDR, API Reference, API Reference
@@ -589,7 +590,7 @@ and have been discussed in the previous sections.
 @end deffn
 
 
-@node Implementation of ONC RPC,  , Implementation of XDR, API Reference
+@node Implementation of ONC RPC, Standard RPC Programs, Implementation of XDR, API Reference
 @section Implementation of ONC RPC
 
 This section describes facilities available for the creation of ONC
@@ -896,6 +897,131 @@ Return a binary input port that proxies @var{port} in order to implement
 decoding of the record marking standard (RFC 1831, Section 10).
 @end deffn
 
+
+@node Standard RPC Programs,  , Implementation of ONC RPC, API Reference
+@section Standard RPC Programs
+
+GNU Guile-RPC provides client-side and/or server-side of some commonly
+found ONC RPC program, which are described below.  Currently, this is
+limited to the portmapper interface, but other interfaces (e.g.,
+``mount'', NFSv2) may follow.
+
+@menu
+* The Portmapper Program::      A directory of instances of RPC programs
+@end menu
+
+@node The Portmapper Program,  , Standard RPC Programs, Standard RPC Programs
+@subsection The Portmapper Program
+
+@cindex portmapper
+
+The @code{(rpc rpc portmap)} module implements the widespread
+@dfn{portmapper} RPC program defined in RFC 1833 (@pxref{References, RFC
+1833@comma{} Section 3}).  As the name suggests, the portmapper
+interface allows servers to be queried for the association between an
+RPC service and the port it is listening to.  It also allows clients to
+query the list of services registered.
+
+@cindex @code{portmap} daemon
+@cindex service discovery
+
+In practice, most machines run a system-wide @code{portmap} daemon on
+port 111 (TCP or UDP), and it is this server that is queried for
+information about locally hosted RPC programs.  The @code{grpc-rpcinfo}
+program is a portmapper client that can be used to query a portmapper
+server (@pxref{Invoking grpc-rpcinfo, the @code{grpc-rpcinfo} tool})
+
+Note that registering RPC programs with the portmapper is optional: it
+is basically a directory mechanism that allows servers to be located
+quite easily, but other existing mechanisms could be used for that
+purpose, e.g., decentralized @dfn{service discovery}
+(@pxref{Introduction,, service discovery with DNS-SD in Guile-Avahi,
+guile-avahi, Using Avahi in Guile Scheme Programs}).
+
+The module exports client-side procedures, as returned by
+@code{make-synchronous-rpc-call} (@pxref{Building an RPC Client}), for
+the various portmapper procedures.  They are listed below.
+
+@deffn {Scheme Procedure} portmapper-null arg xid port
+Invoke the @code{null} RPC over @var{port}, ignoring @var{arg}, and
+return @code{%void}.
+@end deffn
+
+@deffn {Scheme Procedure} portmapper-set arg xid port
+Invoke the @code{set} RPC over @var{port} with argument @var{arg}.  The
+invoked server should register the RPC program specified by @var{arg},
+where @var{arg} must be an XDR struct (i.e., a Scheme list) containing
+these four elements: the RPC program number, its version number, its
+protocol and its port.  The protocol number should be one of
+@code{IPPROTO_TCP} or @code{IPPROTO_UDP} (@pxref{Network Sockets and
+Communication,,, guile, Guile Reference Manual}).  An XDR boolean is
+returned, indicating whether the request successful.
+@end deffn
+
+@deffn {Scheme Procedure} portmapper-unset arg xid port
+Invoke the @code{unset} RPC over @var{port} with argument @var{arg}.
+The invoked server should unregister the RPC program specified by
+@var{arg}, where @var{arg} must have the same form as for
+@code{portmapper-set}.  Again, an XDR boolean is returned, indicating
+whether the request was successful.
+@end deffn
+
+@deffn {Scheme Procedure} portmapper-get-port arg xid port
+Invoke the @code{get-port} RPC over @var{port} with argument @var{arg},
+which must have the same form as previously mentioned (except that its
+port number is ignored).  The invoked server returns an unsigned integer
+indicating the port of that RPC program.
+@end deffn
+
+@deffn {Scheme Procedure} portmapper-dump arg xid port
+Invoke the @code{dump} RPC over @var{port}, ignoring @var{arg}.  The
+invoked server should return a list of 4-element lists describing the
+registered RPC programs.  Those four element list are the same as for
+@code{portmapper-set} and @code{portmapper-get}, namely the RPC program
+number and version, its protocol and its port.
+@end deffn
+
+@deffn {Scheme Procedure} portmapper-call-it arg xid port
+Invoke the @var{call-it} procedure over @var{port}.  Quoting RFC 1833,
+this procedure ``allows a client to call another remote procedure on the
+same machine without knowing the remote procedure's port number''.
+Concretely, it makes the portmapper invoke over UDP the procedure of the
+program matching the description in @var{arg}, where @var{arg} is an XDR
+struct (i.e., a Scheme list) containing an RPC program and version
+number, a procedure number, and an opaque array denoting the procedure
+arguments (an @code{xdr-variable-length-opaque-array}).
+
+On success, it returns a struct consisting of the port number of the
+matching program and an opaque array representing the RPC reply.  On
+failure, it does not return.  Therefore, this synchronous call version
+may be inappropriate.  We recommend that you do not use it.
+@end deffn
+
+The @code{portmap} module also provides convenience functions to
+retrieve the symbolic name associated with common RPC program numbers.
+The association between program numbers and their name is usually stored
+in @file{/etc/rpc} on Unix systems and it can be parsed using the
+@code{read-rpc-service-list} procedure.
+
+@deffn {Scheme Procedure} read-rpc-service-list port
+Return a list of name-program pairs read from @var{port} (e.g., the
+@file{/etc/rpc} file), showing the connection between an RPC program
+human-readable name and its program number.
+@end deffn
+
+@deffn {Scheme Procedure} lookup-rpc-service-name service-list program
+Lookup RPC program numbered @var{program} in @var{service-list} (a list as
+returned by @code{read-rpc-service-list}) and return its human-readable
+name.
+@end deffn
+
+@deffn {Scheme Procedure} lookup-rpc-service-number service-list program
+Lookup RPC program named @var{program} in @var{service-list} (a list as
+returned by @code{read-rpc-service-list}) and return its RPC program
+number.
+@end deffn
+
+
 @c *********************************************************************
 @node Stand-Alone Tools, References, API Reference, Top
 @chapter Stand-Alone Tools
@@ -914,9 +1040,10 @@ command-line.  Actually, there's currently only one such tool,
 @cindex @code{rpcinfo}
 
 This program is equivalent to the @code{rpcinfo} program available on
-most Unix systems.  In particular, the GNU C Library provides
-@code{rpcinfo}.  Among the options supported by @code{rpcinfo}, only a
-few of them are supported at this moment:
+most Unix systems and notably provided by the GNU C Library.  In is a
+client of the portmapper RPC program (@pxref{The Portmapper Program}).
+Among the options supported by @code{rpcinfo}, only a few of them are
+supported at this moment:
 
 @table @option
 
@@ -964,6 +1091,9 @@ Remote Procedure Call Protocol Specification Version 2''}, August
 @item RFC 4506
 M. Eisler et al., @uref{http://tools.ietf.org/html/rfc4506, ``XDR:
 External Data Representation Standard''}, May 2006.
+@item RFC 1833
+R. Srinivasan et al., @uref{http://tools.ietf.org/html/rfc1833,
+``Binding Protocols for ONC RPC Version 2''}, August 2005.
 @end table
 
 @c *********************************************************************
