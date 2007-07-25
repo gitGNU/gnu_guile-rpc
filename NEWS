@@ -1,13 +1,26 @@
 * New in GNU Guile-RPC 0.1
 
-** Became part of the GNU Project
-** Switched source code to LGPLv3
-** Switched manual to GNU FDL
-** Added portmapper interface definitions
-** Added portmapper client `grpc-rpcinfo', similar to `rpcinfo(1)'
-** Bug fixes in the TCP server loop
-** Added a generic event loop, `run-input-event-loop'
-** Better handle disconnections in `serve-one-tcp-request'
+** Packaging changes
+*** Became part of the GNU Project
+*** Switched source code to LGPLv3
+*** Switched manual to GNU FDL
+
+** New features
+*** Added portmapper interface definitions
+*** Added portmapper client `grpc-rpcinfo', similar to `rpcinfo(1)'
+*** Added a generic event loop, `run-input-event-loop'
+
+** Bug fixes
+*** Better handle disconnections in `serve-one-tcp-request'
+*** Various bug fixes in the TCP server loop
+
+
+Copyright 2007  Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved.
+
 
 ;; Local Variables:
 ;; mode: outline

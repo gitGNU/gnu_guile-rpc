@@ -14,6 +14,9 @@ Requirements
   * guile-r6rs-libs 0.0 or later
     http://www.laas.fr/~lcourtes/software/guile/guile-r6rs-libs-0.0.tar.gz
 
+  * Guile-Lib, any recent version
+    http://home.gna.org/guile-lib/
+
 
 Development
 -----------
@@ -21,13 +24,27 @@ Development
 GNU Guile-RPC is hosted at Savannah and development uses the GNU Arch
 revision control system (http://www.gnu.org/software/gnu-arch/).
 
-The main GNU Arch repository is located at
-http://arch.sv.gnu.org/archives/guile-rpc/2007/ .  Look for branch
-`guile-rpc--devo--0.1' or similar.
+The main GNU Arch repository is located at:
 
-Please email <bug-guile-rpc@gnu.org> for comments, patches, etc.
+  http://arch.sv.gnu.org/archives/guile-rpc/2007/
+
+Look for branch `guile-rpc--devo--0.1' or similar.
+
+Please email <bug-guile-rpc@gnu.org> for bug reports, comments, patches,
+etc.
 
 
 Enjoy!
 
-Ludovic, February 2007.
+Ludovic Courtès <ludo@gnu.org>.
+
+
+Copyright 2007  Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice
+and this notice are preserved.
+
+;;; Local Variables:
+;;; coding: utf-8
+;;; End:
