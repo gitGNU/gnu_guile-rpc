@@ -37,6 +37,15 @@
            read-rpc-service-list lookup-rpc-service-name
            lookup-rpc-service-number))
 
+;;; Author: Ludovic Courtès
+;;;
+;;; Commentary:
+;;;
+;;; This module provides a client interface to the portmapper RPC program, as
+;;; defined in Section 3 of RFC 1833.
+;;;
+;;; Code:
+
 
 ;;;
 ;;; Protocol constants.
@@ -87,6 +96,7 @@
                        #f))
 
 (define (xdr-decode-pmap-list port)
+  ;; The custom decoder for `pmaplist_t'.
   (let loop ((item (xdr-decode pmap-list-element-type port))
              (result '()))
     (if (or (eof-object? item)
@@ -96,6 +106,8 @@
               (cons (cdr item) result)))))
 
 (define (make-portmapper-dump-call send-message wrap-input-port)
+  ;; XXX: A custom version of `make-synchronous-rpc-call' for
+  ;; `portmapper-dump'.
   (define arg-type xdr-void)
   (define program %portmapper-program-number)
   (define version %portmapper-version-number)
@@ -119,6 +131,16 @@
              (reply-msg (xdr-decode rpc-message endpoint)))
         (and (assert-successful-reply reply-msg xid)
              (xdr-decode-pmap-list endpoint))))))
+
+(define call-result-type
+  (make-xdr-struct-type (list xdr-unsigned-integer                ;; port
+                              xdr-variable-length-opaque-array))) ;; result
+
+(define call-args-type
+  (make-xdr-struct-type (list xdr-unsigned-integer                ;; pm_prog
+                              xdr-unsigned-integer                ;; pm_vers
+                              xdr-unsigned-integer                ;; pm_prot
+                              xdr-variable-length-opaque-array))) ;; args
 
 
 ;;;
@@ -157,7 +179,7 @@
   (make-synchronous-rpc-call %portmapper-program-number
                              %portmapper-version-number
                              %portmapper-call-it-proc-number
-                             xdr-void xdr-void))
+                             call-args-type call-result-type))
 
 
 
@@ -166,8 +188,9 @@
 ;;;
 
 (define (read-rpc-service-list port)
-  "Return a list of name-program pairs, showing the connection between an RPC
-program human-readable name and its program number."
+  "Return a list of name-program pairs read from @var{port} (e.g., the
+@file{/etc/rpc} file), showing the connection between an RPC program
+human-readable name and its program number."
   (define comment-rx (make-regexp "^[[:blank:]]*#.*$" regexp/extended))
   (define empty-rx (make-regexp "^[[:blank:]]*$" regexp/extended))
   (define service-rx
@@ -213,5 +236,7 @@ returned by @code{read-rpc-service-list}) and return its RPC program number."
         (cdr result)
         #f)))
 
+
+;;; portmap.scm ends here
 
 ;;; arch-tag: beb01ebb-2e39-4f9e-ab3f-1e6f5ec52bea
