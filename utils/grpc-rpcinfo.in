@@ -122,15 +122,20 @@ There is NO WARRANTY, to the extent permitted by law.~%"))
                  (error "portmapper unreachable")))))
 
           ((option-ref opt 'delete #f)
-           (let ((args (map string->number (option-ref opt '() '()))))
-             (if (= (length args) 2)
-                 (let ((program (car args))
-                       (version (cadr args)))
+           (let* ((args (option-ref opt '() '()))
+                  (argc (length args)))
+             (if (and (>= argc 2) (<= argc 3))
+                 (let ((program (string->number (car args)))
+                       (version (string->number (cadr args)))
+                       (hosts   (cddr args)))
                    (catch 'system-error
                      (lambda ()
                        (let ((s (socket PF_INET SOCK_STREAM 0))
                              (sockaddr
-                              (host-portmapper-socket-address "localhost")))
+                              (host-portmapper-socket-address
+                               (if (null? hosts)
+                                   "localhost"
+                                   (car hosts)))))
                          (connect s sockaddr)
                          (let ((result
                                 (portmapper-unset (list program version 0 0)
