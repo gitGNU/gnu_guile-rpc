@@ -40,6 +40,11 @@ Documentation License".
 * Guile-RPC: (guile-rpc).      An ONC RPC Framework for Guile.
 @end direntry
 
+@dircategory Network Applications
+@direntry
+* grpc-rpcinfo: (guile-rpc)Invoking grpc-rpcinfo.
+                               Guile-RPC's portmapper client
+@end direntry
 
 @titlepage
 @title An ONC RPC Framework for Guile
@@ -83,6 +88,7 @@ last updated in @value{UPDATED-MONTH}.
 * Obtaining and Installing::       Notes on installation
 * Quick Start::                    Writing an RPC client/server in a glimpse
 * API Reference::                  Everything about Guile-RPC
+* Stand-Alone Tools::              Command-line tools
 * References::                     Useful documents
 * GNU Free Documentation License:: The license of this manual
 
@@ -332,7 +338,7 @@ this wonderful RPC interface!
 
 
 @c *********************************************************************
-@node API Reference, References, Quick Start, Top
+@node API Reference, Stand-Alone Tools, Quick Start, Top
 @chapter API Reference
 
 This section first details facilities available to manipulate XDR
@@ -890,9 +896,64 @@ Return a binary input port that proxies @var{port} in order to implement
 decoding of the record marking standard (RFC 1831, Section 10).
 @end deffn
 
+@c *********************************************************************
+@node Stand-Alone Tools, References, API Reference, Top
+@chapter Stand-Alone Tools
+
+GNU Guile-RPC comes with stand-alone tools that can be used from the
+command-line.  Actually, there's currently only one such tool,
+@code{grpc-rpcinfo}.
+
+@menu
+* Invoking grpc-rpcinfo::       Querying the portmapper
+@end menu
+
+@node Invoking grpc-rpcinfo,  , Stand-Alone Tools, Stand-Alone Tools
+@section Invoking @code{grpc-rpcinfo}
+
+@cindex @code{rpcinfo}
+
+This program is equivalent to the @code{rpcinfo} program available on
+most Unix systems.  In particular, the GNU C Library provides
+@code{rpcinfo}.  Among the options supported by @code{rpcinfo}, only a
+few of them are supported at this moment:
+
+@table @option
+
+@item --help
+Print a summary of the command-line options and exit.
+
+@item --version
+Print the version number of GNU Guile-RPC and exit.
+
+@item --dump
+@itemx -p
+Query the portmapper and list the registered RPC services.
+
+@item --delete
+@itemx -d
+Unregister the RPC program with the given RPC program and version
+numbers from the portmapper.
+
+@end table
+
+Note that the host where the portmapper lives can be specified as the
+last argument to @code{grpc-rpcinfo}:
+
+@example
+# Query the portmapper at host `klimt'.
+
+$ grpc-rpcinfo -p klimt
+program vers    proto   port    name
+100000  2       tcp     111     portmapper
+100000  2       udp     111     portmapper
+$ grpc-rpcinfo -d 100000 2 klimt 
+ERROR: `portmapper-unset' failed FALSE
+@end example
+
 
 @c *********************************************************************
-@node References, GNU Free Documentation License, API Reference, Top
+@node References, GNU Free Documentation License, Stand-Alone Tools, Top
 @chapter References
 
 @table @code
