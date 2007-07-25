@@ -1,5 +1,15 @@
 \input texinfo  @c -*-texinfo-*-
 
+@c Copyright (C) 2007  Free Software Foundation, Inc.
+@c
+@c Permission is granted to copy, distribute and/or modify this
+@c document under the terms of the GNU Free Documentation License,
+@c Version 1.1 or any later version published by the Free Software
+@c Foundation; with no Invariant Sections, no Front-Cover Texts and
+@c no Back-Cover Texts.  A copy of the license is included in the
+@c section entitled "GNU Free Documentation License".
+
+
 @c %**start of header
 @setfilename guile-rpc.info
 @settitle An ONC RPC Framework for Guile
@@ -10,31 +20,26 @@
 @set EDITION 1
 @include version.texi
 
+@copying
+This file documents GNU Guile-RPC @value{VERSION}.
 
-@ifinfo
+Copyright @copyright{} 2007 Free Software Foundation, Inc.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts and no Back-Cover Texts.  A
+copy of the license is included in the section entitled "GNU Free
+Documentation License".
+@end quotation
+@end copying
+
 @dircategory The Algorithmic Language Scheme
 @direntry
 * Guile-RPC: (guile-rpc).      An ONC RPC Framework for Guile.
 @end direntry
 
-This file documents GNU Guile-RPC.
-
-Copyright @copyright{} 2007 Ludovic Court@`es
-
-Permission is granted to make and distribute verbatim copies of this
-manual provided the copyright notice and this permission notice are
-preserved on all copies.
-
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the
-entire resulting derived work is distributed under the terms of a
-permission notice identical to this one.
-
-Permission is granted to copy and distribute translations of this manual
-into another language, under the above conditions for modified versions,
-except that this permission notice may be stated in a translation
-approved by the author.
-@end ifinfo
 
 @titlepage
 @title An ONC RPC Framework for Guile
@@ -47,7 +52,7 @@ Edition @value{EDITION} @*
 @c Updated for Guile-RPC @value{VERSION} @*
 @value{UPDATED} @*
 
-Copyright @copyright{} 2007 Ludovic Court@`es
+Copyright @copyright{} 2007 Free Software Foundation
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -74,14 +79,15 @@ This document describes GNU Guile-RPC version @value{VERSION}.  It was
 last updated in @value{UPDATED-MONTH}.
 
 @menu
-* Introduction::                Overview of Guile-RPC
-* Quick Start::                 Writing an RPC client/server in a glimpse
-* API Reference::               Everything about Guile-RPC
-* References::                  Useful documents
+* Introduction::                   Overview of Guile-RPC
+* Quick Start::                    Writing an RPC client/server in a glimpse
+* API Reference::                  Everything about Guile-RPC
+* References::                     Useful documents
+* GNU Free Documentation License:: The license of this manual
 
-* Concept Index::               Concepts discussed in this document
-* Function Index::              Index of Scheme procedures
-* Variable Index::              Index of Scheme variables
+* Concept Index::                  Concepts discussed in this document
+* Function Index::                 Index of Scheme procedures
+* Variable Index::                 Index of Scheme variables
 @end menu
 
 
@@ -862,7 +868,7 @@ decoding of the record marking standard (RFC 1831, Section 10).
 
 
 @c *********************************************************************
-@node References, Concept Index, API Reference, Top
+@node References, GNU Free Documentation License, API Reference, Top
 @chapter References
 
 @table @code
@@ -875,9 +881,15 @@ M. Eisler et al., @uref{http://tools.ietf.org/html/rfc4506, ``XDR:
 External Data Representation Standard''}, May 2006.
 @end table
 
+@c *********************************************************************
+@node GNU Free Documentation License, Concept Index, References, Top
+@appendix GNU Free Documentation License
+
+@include fdl.texi
+
 
 @c *********************************************************************
-@node Concept Index, Function Index, References, Top
+@node Concept Index, Function Index, GNU Free Documentation License, Top
 @unnumbered Concept Index
 @printindex cp
 

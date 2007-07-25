@@ -2,6 +2,7 @@
 
 ** Became part of the GNU Project
 ** Switched source code to LGPLv3
+** Switched manual to GNU FDL
 ** Added portmapper interface definitions
 ** Added portmapper client `grpc-rpcinfo', similar to `rpcinfo(1)'
 ** Bug fixes in the TCP server loop
