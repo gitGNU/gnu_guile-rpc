@@ -4,7 +4,7 @@ main='(module-ref (resolve-module '\''(guile-rpc rpc-info)) '\'main')'
 exec ${GUILE-@GUILE@} -l "$0" -c "(apply $main (command-line))" "$@"
 !#
 ;;; GNU Guile-RPC --- A Scheme implementation of ONC RPC.
-;;; Copyright (C) 2007  Free Software Foundation
+;;; Copyright (C) 2007  Free Software Foundation, Inc.
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify it
 ;;; under the terms of the GNU General Public License as published by the

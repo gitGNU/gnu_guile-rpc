@@ -1,5 +1,5 @@
 ;;; GNU Guile-RPC --- A Scheme implementation of ONC RPC.
-;;; Copyright (C) 2007  Free Software Foundation
+;;; Copyright (C) 2007  Free Software Foundation, Inc.
 ;;;
 ;;; This file is part of GNU Guile-RPC.
 ;;;
