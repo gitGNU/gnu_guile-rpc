@@ -2,6 +2,24 @@
 # arch-tag: automatic-ChangeLog--guile-rpc@sv.gnu.org--2007/guile-rpc--devo--0.1
 #
 
+2007-07-26 09:52:12 GMT	Ludovic Courtes <ludo@gnu.org>	patch-24
+
+    Summary:
+      Added `doc/fdl.texi'.
+    Revision:
+      guile-rpc--devo--0.1--patch-24
+
+
+    new files:
+     doc/.arch-ids/fdl.texi.id doc/fdl.texi
+
+    modified files:
+     ChangeLog doc/Makefile.am
+
+    new patches:
+     lcourtes@laas.fr--2005-mobile/guile-rpc--devo--0--patch-39
+
+
 2007-07-26 09:47:41 GMT	Ludovic Courtes <ludo@gnu.org>	patch-23
 
     Summary:
