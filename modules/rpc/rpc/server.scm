@@ -46,7 +46,7 @@
            handle-procedure-lookup-error
 
            make-i/o-manager i/o-manager?
-           i/o-manager:exception-handler i/o-manager:read-handler
+           i/o-manager-exception-handler i/o-manager-read-handler
            run-input-event-loop
 
            make-rpc-listening-socket-i/o-manager
@@ -337,8 +337,8 @@ count."
 (define-record-type <i/o-manager>
   (%make-i/o-manager  exception-handler read-handler)
   i/o-manager?
-  (exception-handler  i/o-manager:exception-handler)
-  (read-handler       i/o-manager:read-handler))
+  (exception-handler  i/o-manager-exception-handler)
+  (read-handler       i/o-manager-read-handler))
 
 (define (make-i/o-manager exception-handler read-handler)
   "Return an I/O manager.  When data is available for reading,
@@ -412,8 +412,8 @@ is left."
                     (handle-events reads
                                    (handle-events excepts
                                                   fd+manager-list
-                                                  i/o-manager:exception-handler)
-                                   i/o-manager:read-handler)))))))
+                                                  i/o-manager-exception-handler)
+                                   i/o-manager-read-handler)))))))
 
 
 ;;;
