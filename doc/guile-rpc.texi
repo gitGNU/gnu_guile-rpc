@@ -284,8 +284,8 @@ bound to a connection to the RPC server:
 @end example
 
 This example creates an IPv4 connection to the local host on port 6666
-(@pxref{Network Sockets and Communication,,, guile, Guile Reference
-Manual}).
+(@pxref{Network Sockets and Communication,,, guile, The GNU Guile
+Reference Manual}).
 
 On success, @code{invoke-split-number} returns a two-element list
 where the first element corresponds to the @code{integer_part} field
@@ -326,15 +326,17 @@ our program.
 (listen server-socket 1024)
 
 ;; Go ahead and serve requests.
-(run-tcp-rpc-server (list (cons server-socket my-rpc-program))
-                    1000000 ;; a one-second timeout
-                    #f      ;; we don't care about closed connections
-                    (lambda () ;; our idle thunk
-                      (format #t "one second passed~%")))
+(run-stream-rpc-server (list (cons server-socket my-rpc-program))
+                       1000000 ;; a one-second timeout
+                       #f      ;; we don't care about closed connections
+                       (lambda () ;; our idle thunk
+                         (format #t "one second passed~%")))
 @end example
 
 And now we're all set: We have a working TCP client and server for
-this wonderful RPC interface!
+this wonderful RPC interface!  This would work similarly for other
+stream-oriented transports such as Unix-domain sockets: only the
+@code{socket} and @code{bind} calls need to be adapted.
 
 
 @c *********************************************************************
@@ -696,47 +698,51 @@ it will be passed the decoded argument and should return a result type
 that may be encoded as @var{result-xdr-type}.
 @end deffn
 
+@vindex @code{SOCK_STREAM}
+
 Once a program, its versions and procedures have been defined, an RPC
 server for that program (and possibly others) can be run using the
 following procedures.
 
-@deffn {Scheme Procedure} run-tcp-rpc-server sockets+rpc-programs timeout close-connection-proc idle-thunk
-Run a full-blown TCP RPC server for the given listening sockets and RPC
-programs.  @var{sockets+rpc-programs} should be a list of listening
-socket-RPC program pairs (where ``RPC programs'' are objects as returned by
-@code{make-rpc-program}).  @var{timeout} should be a number of microseconds
-that the loop should wait for input; when no input is available,
-@var{idle-thunk} is invoked, thus at most every @var{timeout} microseconds.
-If @var{close-connection-proc} is a procedure, it is called when a connection
-is being closed is passed the corresponding @code{<tcp-connection>}
-object.
+@deffn {Scheme Procedure} run-stream-rpc-server sockets+rpc-programs timeout close-connection-proc idle-thunk
+Run a full-blown connection-oriented (i.e., @code{SOCK_STREAM}, be it
+@code{PF_UNIX} or @code{PF_INET}) RPC server for the given listening
+sockets and RPC programs.  @var{sockets+rpc-programs} should be a list
+of listening socket-RPC program pairs (where ``RPC programs'' are
+objects as returned by @code{make-rpc-program}).  @var{timeout} should
+be a number of microseconds that the loop should wait for input; when no
+input is available, @var{idle-thunk} is invoked, thus at most every
+@var{timeout} microseconds.  If @var{close-connection-proc} is a
+procedure, it is called when a connection is being closed is passed the
+corresponding @code{<stream-connection>} object.
 @end deffn
 
-While a TPC RPC server is running, using @code{run-tcp-rpc-server},
-its procedure handlers can get information about the current
-connection and client:
+While an RPC server is running over a stream-oriented transport such as
+TCP using @code{run-stream-rpc-server}, its procedure handlers can get
+information about the current connection and client:
 
-@deffn {Scheme Procedure} current-tcp-connection
-This procedure returns a @code{<tcp-connection>} object describing the
-current TCP connection (when within a @code{run-tcp-rpc-server}
+@deffn {Scheme Procedure} current-stream-connection
+This procedure returns a @code{<stream-connection>} object describing the
+current TCP connection (when within a @code{run-stream-rpc-server}
 invocation).  This object can be queried with the procedures described
 below.
 @end deffn
 
-@deffn {Scheme Procedure} tcp-connection-port connection
+@deffn {Scheme Procedure} stream-connection-port connection
 Return the I/O port (@emph{not} the TCP port) for @var{connection}.
 @end deffn
 
-@deffn {Scheme Procedure} tcp-connection-peer-address connection
+@deffn {Scheme Procedure} stream-connection-peer-address connection
 Return the IP address of the peer/client of @var{connection}
-(@pxref{Network Socket Address,,, guile, Guile Reference Manual}).
+(@pxref{Network Socket Address,,, guile, The GNU Guile Reference
+Manual}).
 @end deffn
 
-@deffn {Scheme Procedure} tcp-connection-rpc-program connection
+@deffn {Scheme Procedure} stream-connection-rpc-program connection
 Return the RPC program object corresponding to @var{connection}.
 @end deffn
 
-For a complete server example, @ref{Creating the Server}.
+For a complete RPC server example, @ref{Creating the Server}.
 
 
 @node ONC RPC Message Types, Record Marking Standard, Building an RPC Server, Implementation of ONC RPC
@@ -875,7 +881,7 @@ This protocol is implemented by the @code{(rpc rpc transports)}
 module.  It is automatically used by the high-level client and server
 facilities, namely @ref{Building an RPC Client,
 @code{make-synchronous-rpc-call}} and @ref{Building an RPC Server,
-@code{run-tcp-rpc-server}}.  The available facilities are described
+@code{run-stream-rpc-server}}.  The available facilities are described
 below.
 
 @deffn {Scheme Procedure} send-rpc-record port bv offset len
@@ -954,8 +960,8 @@ where @var{arg} must be an XDR struct (i.e., a Scheme list) containing
 these four elements: the RPC program number, its version number, its
 protocol and its port.  The protocol number should be one of
 @code{IPPROTO_TCP} or @code{IPPROTO_UDP} (@pxref{Network Sockets and
-Communication,,, guile, Guile Reference Manual}).  An XDR boolean is
-returned, indicating whether the request successful.
+Communication,,, guile, The GNU Guile Reference Manual}).  An XDR
+boolean is returned, indicating whether the request successful.
 @end deffn
 
 @deffn {Scheme Procedure} portmapper-unset arg xid port
