@@ -635,6 +635,8 @@ For an example, see @ref{Creating the Client}.
 @node Building an RPC Server, ONC RPC Message Types, Building an RPC Client, Implementation of ONC RPC
 @subsection Building an RPC Server
 
+@cindex event loop
+
 The @code{(rpc rpc server)} module provides helpful facilities for
 building an ONC RPC server.  In particular, it provides tools to
 decode RPC call messages, as well as an event loop mechanisms that
@@ -743,6 +745,59 @@ Return the RPC program object corresponding to @var{connection}.
 @end deffn
 
 For a complete RPC server example, @ref{Creating the Server}.
+
+@cindex I/O manager
+
+The @code{run-stream-rpc-server} mechanism is limited to servers
+managing only RPC connections, and only over stream-oriented
+transports.  Should your server need to handle other input sources, a
+more geneneral event handling mechanism is available.  This works by
+first creating a set of @dfn{I/O managers} and then passing
+@code{run-input-event-loop} a list of I/O manager-file descriptor pairs
+to actually handle I/O events.
+
+@deffn {Scheme Procedure} make-i/o-manager exception-handler read-handler
+Return an I/O manager.  When data is available for reading,
+@var{read-handler} will be called and passed a port to read from; when
+an exception occurs on a port, @var{exception-handler} is called and
+passed the failing port.
+@end deffn
+
+@deffn {Scheme Procedure} i/o-manager? obj
+Return @code{#t} if @var{obj} is an I/O manager.
+@end deffn
+
+@deffn {Scheme Procedure} i/o-manager-exception-handler manager
+@deffnx {Scheme Procedure} i/o-manager-read-handler manager
+Return, respectively, the exception handler and the read handler of
+@var{manager}.
+@end deffn
+
+@deffn {Scheme Procedure} run-input-event-loop fd+manager-list timeout idle-thunk
+Run an input event loop based on @var{fd+manager-list}, a list of pairs of
+input ports (or file descriptors) and I/O managers.  I/O managers are invoked
+are invoked and passed the corresponding port when data becomes readable or
+when an exception occurs.  I/O manager handlers can:
+
+@itemize
+@item return @code{#f}, in which case the port and I/O manager are removed
+from the list of watched ports;
+@item return a pair containing an input port and I/O manager, in which case
+this pair is added to the list of watched ports;
+@item return true, in which case the list of watched ports remains unchanged.
+@end itemize
+
+When @var{timeout} (a number of microseconds) is reached, @var{idle-thunk} is
+invoked.  If timeout is @code{#f}, then an infinite timeout is assumed and
+@var{idle-thunk} is never run.  The event loop returns when no watched port
+is left.
+@end deffn
+
+The event loop provided by @code{run-input-event-loop} should cover a
+wide range of applications.  However, it will turn out to be
+insufficient in situations where tasks must be executed at specific
+times, and where the interval between consecutive executions varies over
+the program's lifetime.
 
 
 @node ONC RPC Message Types, Record Marking Standard, Building an RPC Server, Implementation of ONC RPC
