@@ -51,9 +51,12 @@
            rpc-system-error?
            rpc-authentication-error?))
 
+;;; Author: Ludovic Courtès <ludo@gnu.org>
+;;;
 ;;; Commentary:
 ;;;
-;;; An implementation of ONC RPC (RFC 1831).
+;;; An implementation of ONC RPC (RFC 1831).  This includes convenience
+;;; functions to create RPC messages and client-side utilities.
 ;;;
 ;;; Code:
 

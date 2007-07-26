@@ -39,7 +39,7 @@
            xdr-enumeration-error:enumeration-alist
            xdr-enumeration-error:value))
 
-;;; Author: Ludovic Courtès <ludovic.courtes@laas.fr>
+;;; Author: Ludovic Courtès <ludo@gnu.org>
 ;;;
 ;;; Commentary:
 ;;;

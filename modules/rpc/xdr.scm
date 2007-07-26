@@ -52,7 +52,7 @@
            xdr-vector-size-exceeded-error:element-count))
 
 
-;;; Author: Ludovic Courtès <ludovic.courtes@laas.fr>
+;;; Author: Ludovic Courtès <ludo@gnu.org>
 ;;;
 ;;; Commentary:
 ;;;

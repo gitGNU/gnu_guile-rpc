@@ -33,6 +33,8 @@
            rpc-reply-body
            rpc-message))
 
+;;; Author: Ludovic Courtès <ludo@gnu.org>
+;;;
 ;;; Commentary:
 ;;;
 ;;; Definition of the XDR types used by the ONC RPC message protocol (RFC
