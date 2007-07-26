@@ -421,18 +421,18 @@ is left."
 ;;;
 
 (define (serve-one-stream-request program port)
-  "Serve one block store requests for @var{program} on port @var{port}.
-@var{peer-address} should be the IP address where the request originates.  If
-@var{port} is closed of the end-of-file was reached, an
+  "Serve one RPC for @var{program}, reading the RPC from @var{port} (using
+the record-marking protocol) and writing the reply to @var{port}.  If
+@var{port} is closed or the end-of-file was reached, an
 @code{&rpc-connection-lost-error} is raised."
-  (let* ((input-port (rpc-record-marking-input-port port)))
+  (let ((input-port (rpc-record-marking-input-port port)))
 
     (catch 'system-error
       (lambda ()
         (if (eof-object? (lookahead-u8 port))
             (raise (condition (&rpc-connection-lost-error
                                (port port))))
-            (let* ((msg (xdr-decode rpc-message input-port))
+            (let* ((msg  (xdr-decode rpc-message input-port))
                    (call (procedure-call-information msg)))
               (handle-procedure-call call (list program) input-port
                                      (lambda (bv offset count)
@@ -479,7 +479,7 @@ called upon connection termination."
                                  ;; discard the connection
                                  (close-conn socket)))
                              (parameterize ((current-stream-connection conn))
-                               (serve-one-tcp-request program socket))
+                               (serve-one-stream-request program socket))
 
                              #t))))
 
