@@ -5,7 +5,7 @@
 *** Switched source code to LGPLv3
 *** Switched manual to GNU FDL
 
-** New features
+** New features (see manual for details)
 *** Added portmapper RPC program definitions
 *** Added portmapper client `grpc-rpcinfo', similar to `rpcinfo(1)'
 *** Added a generic event loop, `run-input-event-loop'

@@ -730,6 +730,10 @@ invocation).  This object can be queried with the procedures described
 below.
 @end deffn
 
+@deffn {Scheme Procedure} stream-connection? obj
+Return @code{#t} if @var{obj} is a @code{<stream-connection>} object.
+@end deffn
+
 @deffn {Scheme Procedure} stream-connection-port connection
 Return the I/O port (@emph{not} the TCP port) for @var{connection}.
 @end deffn
@@ -798,6 +802,16 @@ wide range of applications.  However, it will turn out to be
 insufficient in situations where tasks must be executed at specific
 times, and where the interval between consecutive executions varies over
 the program's lifetime.
+
+Finally, a lower-level mechanism is available to handle a single
+incoming RPC:
+
+@deffn {Scheme Procedure} serve-one-stream-request program port
+Serve one RPC for @var{program}, reading the RPC from @var{port} (using
+the record-marking protocol) and writing the reply to @var{port}.  If
+@var{port} is closed or the end-of-file was reached, an
+@code{&rpc-connection-lost-error} is raised.
+@end deffn
 
 
 @node ONC RPC Message Types, Record Marking Standard, Building an RPC Server, Implementation of ONC RPC
