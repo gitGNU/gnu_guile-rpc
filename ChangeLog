@@ -2,6 +2,18 @@
 # arch-tag: automatic-ChangeLog--guile-rpc@sv.gnu.org--2007/guile-rpc--devo--0.1
 #
 
+2007-07-30 07:49:40 GMT	Ludovic Courtes <ludo@gnu.org>	version-0
+
+    Summary:
+      Releasing 0.1.
+    Revision:
+      guile-rpc--devo--0.1--version-0
+
+
+    modified files:
+     ChangeLog
+
+
 2007-07-26 09:52:12 GMT	Ludovic Courtes <ludo@gnu.org>	patch-24
 
     Summary:
